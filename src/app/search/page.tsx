@@ -6,6 +6,8 @@ import DroneCard from '@/components/DroneCard';
 import { sampleDrones } from '@/data/drones';
 import { Drone, DroneLevel } from '@/types/drone';
 import FilterSection from '@/components/FilterSection';
+import InlineAd from '@/components/InlineAd';
+import { inlineAds } from '@/data/ads';
 
 function SearchComponent() {
   const searchParams = useSearchParams();
@@ -68,6 +70,8 @@ function SearchComponent() {
           priceRange={priceRange}
           onFilterChange={handleFilterChange}
         />
+
+        {inlineAds.length > 0 && <InlineAd ad={inlineAds[0]} />}
 
         <div className="mt-8">
           <div className="flex items-center justify-between mb-6">
