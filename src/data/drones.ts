@@ -19,12 +19,14 @@ export const sampleDrones: Drone[] = [
     level: 'intermediate',
     description: 'DJI Mini 3 Pro 드론입니다. 4K 카메라, 34분 비행시간. 거의 새것과 같은 상태입니다.',
     seller: {
+      id: '1',
       name: '드론마스터',
       rating: 4.8
     },
     location: '서울시 강남구',
     imageUrl: '/images/dji-mini-3-pro.jpg',
     postedAt: '2024-05-20',
+    status: 'active',
   },
   {
     id: 2,
@@ -43,6 +45,7 @@ export const sampleDrones: Drone[] = [
     level: 'intermediate',
     description: 'Parrot Anafi 드론. 4K HDR 카메라, 접이식 디자인. 1년 사용했지만 상태 양호합니다.',
     seller: {
+      id: '2',
       name: '항공촬영전문',
       rating: 4.5
     },
@@ -50,6 +53,7 @@ export const sampleDrones: Drone[] = [
     imageUrl: '/images/parrot-anafi.jpg',
     postedAt: '2024-05-18',
     isPremium: true,
+    status: 'active',
   },
   {
     id: 3,
@@ -69,12 +73,14 @@ export const sampleDrones: Drone[] = [
     level: 'professional',
     description: 'Autel EVO II 8K 드론. 미개봉 새제품입니다. 8K 영상 촬영 가능, 40분 비행시간.',
     seller: {
+      id: '1',
       name: '드론스토어',
       rating: 5.0
     },
     location: '대구시 수성구',
     imageUrl: '/images/autel-evo-ii.jpg',
     postedAt: '2024-05-22',
+    status: 'active',
   },
   {
     id: 4,
@@ -94,12 +100,14 @@ export const sampleDrones: Drone[] = [
     level: 'beginner',
     description: 'Holy Stone HS720E 입문용 드론. 4K 카메라, GPS 기능. 약간의 사용감 있지만 정상 작동합니다.',
     seller: {
+      id: '3',
       name: '드론초보',
       rating: 4.2
     },
     location: '인천시 연수구',
     imageUrl: '/images/holy-stone-hs720e.jpg',
     postedAt: '2024-05-15',
+    status: 'sold',
   },
   {
     id: 5,
@@ -119,6 +127,7 @@ export const sampleDrones: Drone[] = [
     level: 'professional',
     description: 'DJI Air 2S 드론. 1인치 센서, 5.4K 영상. 6개월 사용했지만 상태 매우 양호합니다.',
     seller: {
+      id: '4',
       name: '프로드론',
       rating: 4.9
     },
@@ -126,6 +135,7 @@ export const sampleDrones: Drone[] = [
     imageUrl: '/images/dji-air-2s.jpg',
     postedAt: '2024-05-21',
     isPremium: true,
+    status: 'active',
   },
   {
     id: 6,
@@ -144,12 +154,14 @@ export const sampleDrones: Drone[] = [
     level: 'intermediate',
     description: 'Skydio 2 자동 추적 드론. AI 기반 자동 비행 기능. 1년 사용했지만 기능 모두 정상입니다.',
     seller: {
+      id: '5',
       name: '스포츠촬영',
       rating: 4.6
     },
     location: '광주시 서구',
     imageUrl: '/images/skydio-2.jpg',
     postedAt: '2024-05-19',
+    status: 'active',
   },
   {
     id: 7,
@@ -169,12 +181,14 @@ export const sampleDrones: Drone[] = [
     level: 'beginner',
     description: 'Yuneec Typhoon H 6축 드론. 4K 카메라, 360도 회전. 사용감 있지만 정상 작동합니다.',
     seller: {
+      id: '6',
       name: '중고드론전문',
       rating: 4.3
     },
     location: '대전시 유성구',
     imageUrl: '/images/yuneec-typhoon-h.jpg',
     postedAt: '2024-05-12',
+    status: 'inactive',
   },
   {
     id: 8,
@@ -194,12 +208,14 @@ export const sampleDrones: Drone[] = [
     level: 'beginner',
     description: 'Potensic D88 입문용 드론. 2K 카메라, GPS 기능. 6개월 사용했지만 상태 양호합니다.',
     seller: {
+      id: '7',
       name: '드론입문자',
       rating: 4.4
     },
     location: '울산시 남구',
     imageUrl: '/images/potensic-d88.jpg',
     postedAt: '2024-05-17',
+    status: 'active',
   },
   {
     id: 9,
@@ -219,6 +235,7 @@ export const sampleDrones: Drone[] = [
     level: 'industrial',
     description: 'DJI Matrice 300 RTK 산업용 드론. 측량, 검사, 농업 등 전문 업무용. RTK 정밀 위치 시스템 탑재.',
     seller: {
+      id: '8',
       name: '산업드론전문',
       rating: 4.9,
     },
@@ -226,6 +243,7 @@ export const sampleDrones: Drone[] = [
     imageUrl: '/images/dji-matrice-300.jpg',
     postedAt: '2024-05-15',
     isPremium: true,
+    status: 'active',
   },
   {
     id: 10,
@@ -244,12 +262,14 @@ export const sampleDrones: Drone[] = [
     level: 'industrial',
     description: 'Parrot Anafi USA 공공안전용 드론. 열화상 카메라, 확대 줌 기능. 공공기관, 소방서 등에서 사용.',
     seller: {
+      id: '9',
       name: '공공안전드론',
       rating: 5.0,
     },
     location: '부산시 동래구',
     imageUrl: '/images/parrot-anafi-usa.jpg',
     postedAt: '2024-05-20',
+    status: 'active',
   },
   {
     id: 11,

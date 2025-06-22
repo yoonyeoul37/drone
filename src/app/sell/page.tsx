@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import { droneBrands, droneLevels, DroneLevel } from '@/types/drone';
 
 export default function SellPage() {
+  const { user } = useAuth();
   const router = useRouter();
   const [listingType, setListingType] = useState<'general' | 'premium'>('general');
   const [premiumPeriod, setPremiumPeriod] = useState<'7days' | '15days' | '30days'>('7days');
@@ -27,17 +29,40 @@ export default function SellPage() {
     level: 'intermediate',
     location: '',
     description: '',
-    images: [] as File[]
+    images: [] as File[],
+    name: '',
+    imageUrl: '/images/default-drone.jpg',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">로그인이 필요합니다</h1>
+            <p className="text-gray-600 mb-6">드론을 등록하려면 로그인해주세요.</p>
+            <button
+              onClick={() => router.push('/login')}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium"
+            >
+              로그인하기
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const { name, value, type } = e.target;
+    if (type === 'checkbox') {
+      const checked = (e.target as HTMLInputElement).checked;
+      setFormData(prev => ({ ...prev, [name]: checked }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,25 +86,44 @@ export default function SellPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const submissionData = {
-      ...formData,
-      isPremium: listingType === 'premium',
-      premiumPeriod: listingType === 'premium' ? premiumPeriod : null,
-      premiumPrice: listingType === 'premium' ? getPremiumPrice(premiumPeriod) : 0,
-    };
+    try {
+      // 실제로는 API 호출을 통해 서버에 저장
+      const droneData = {
+        ...formData,
+        id: Date.now(), // 임시 ID 생성
+        price: parseInt(formData.price),
+        originalPrice: formData.originalPrice ? parseInt(formData.originalPrice) : undefined,
+        minPrice: formData.minPrice ? parseInt(formData.minPrice) : undefined,
+        releaseYear: parseInt(formData.releaseYear.toString()),
+        purchaseYear: formData.purchaseYear ? parseInt(formData.purchaseYear) : undefined,
+        flightDistance: parseInt(formData.flightDistance),
+        totalFlightTime: parseInt(formData.totalFlightTime),
+        totalFlightDistance: parseInt(formData.totalFlightDistance),
+        seller: {
+          id: user.id,
+          name: user.name,
+          rating: 5.0, // 기본 평점
+        },
+        postedAt: new Date().toISOString().split('T')[0],
+        isPremium: listingType === 'premium',
+        status: 'active' as const,
+      };
 
-    console.log('제출 데이터:', submissionData);
-
-    // 실제로는 여기서 API 호출을 하겠지만, 지금은 시뮬레이션
-    setTimeout(() => {
+      console.log('등록할 드론 데이터:', droneData);
+      
+      // 성공 메시지 표시 후 마이페이지로 이동
       if (listingType === 'premium') {
         alert(`[프리미엄 ${getPremiumPeriodLabel(premiumPeriod)}] 판매글이 성공적으로 등록되었습니다!\n기간 종료 후 자동으로 일반 매물로 전환됩니다.`);
       } else {
         alert('[일반] 판매글이 성공적으로 등록되었습니다!');
       }
-      router.push('/');
+      router.push('/mypage/sales');
+    } catch (error) {
+      console.error('드론 등록 실패:', error);
+      alert('드론 등록에 실패했습니다. 다시 시도해주세요.');
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   const getLevelLabel = (level: DroneLevel) => {

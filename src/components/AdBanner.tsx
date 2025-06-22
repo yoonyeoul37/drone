@@ -38,7 +38,7 @@ export default function AdBanner({ ads }: AdBannerProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="relative bg-white shadow-lg rounded-lg overflow-hidden mb-8">
+    <div className="relative bg-gray-100 shadow-md overflow-hidden mb-8">
       {/* 닫기 버튼 */}
       <button
         onClick={closeBanner}
@@ -48,7 +48,7 @@ export default function AdBanner({ ads }: AdBannerProps) {
       </button>
 
       {/* 광고 슬라이드 */}
-      <div className="relative h-64 md:h-80">
+      <div className="relative h-48 md:h-56">
         {ads.map((ad, index) => (
           <div
             key={ad.id}
@@ -59,26 +59,26 @@ export default function AdBanner({ ads }: AdBannerProps) {
           >
             <div className="flex h-full">
               {/* 텍스트 영역 */}
-              <div className="flex-1 flex flex-col justify-center p-8 text-white">
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              <div className="flex-1 flex flex-col justify-center p-6 md:p-8 text-white">
+                <h2 className="text-xl md:text-2xl font-bold mb-3">
                   {ad.title}
                 </h2>
-                <p className="text-lg mb-6 opacity-90">
+                <p className="text-base mb-5 opacity-90">
                   {ad.description}
                 </p>
                 <a
                   href={ad.link}
-                  className="inline-block bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors w-fit"
+                  className="inline-block bg-white text-gray-900 px-5 py-2 rounded-md font-semibold hover:bg-gray-100 transition-colors w-fit"
                 >
                   자세히 보기
                 </a>
               </div>
               
               {/* 이미지 영역 */}
-              <div className="flex-1 flex items-center justify-center p-8">
-                <div className="w-full h-full bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+              <div className="flex-1 flex items-center justify-center p-6">
+                <div className="w-full h-full bg-white bg-opacity-20 flex items-center justify-center">
                   <div className="text-white text-center">
-                    <div className="text-4xl mb-2">🚁</div>
+                    <div className="text-3xl mb-2">🚁</div>
                     <div className="text-sm opacity-80">광고 이미지</div>
                   </div>
                 </div>
@@ -94,7 +94,7 @@ export default function AdBanner({ ads }: AdBannerProps) {
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all ${
+            className={`w-2.5 h-2.5 rounded-full transition-all ${
               index === currentAd
                 ? 'bg-white'
                 : 'bg-white bg-opacity-50 hover:bg-opacity-75'

@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import Navbar from '@/components/Navbar';
+import { useRouter } from 'next/navigation';
 import PostCard from '@/components/PostCard';
 import InlineAd from '@/components/InlineAd';
 import { samplePosts } from '@/data/posts';
 import { categories } from '@/types/community';
 import { getRandomAd, inlineAds } from '@/data/ads';
 import Link from 'next/link';
+import AdBanner from '@/components/AdBanner';
 
 export default function CommunityPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -54,8 +55,6 @@ export default function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* 헤더 */}
         <div className="mb-8">

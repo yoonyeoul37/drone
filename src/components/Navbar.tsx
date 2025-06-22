@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import Link from 'next/link';
 
 export default function Navbar() {
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, isLoggedIn, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(true); // 임시로 관리자로 설정
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +31,11 @@ export default function Navbar() {
   const handleNavigation = (path: string) => {
     router.push(path);
     setIsMobileMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
   };
 
   const navClass = isScrolled
@@ -102,25 +110,71 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* 로그인 버튼 */}
-          <div className="flex items-center">
-            {isLoggedIn ? (
-              <div className="flex items-center space-x-4">
-                <span className={`${textColorClass} text-sm`}>안녕하세요!</span>
+          {/* 사용자 메뉴 */}
+          <div className="hidden md:flex items-center space-x-4">
+            {user ? (
+              <div className="relative">
                 <button
-                  onClick={() => setIsLoggedIn(false)}
-                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center space-x-2 hover:text-gray-300 transition-colors"
                 >
-                  로그아웃
+                  <span>{user.name}</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
                 </button>
+
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    <Link
+                      href="/mypage"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      마이페이지
+                    </Link>
+                    <Link
+                      href="/mypage/sales"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      내 판매글 관리
+                    </Link>
+                    <Link
+                      href="/sell"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      드론 등록
+                    </Link>
+                    <hr className="my-1" />
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                    >
+                      로그아웃
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
-              <button
-                onClick={() => setIsLoggedIn(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                로그인
-              </button>
+              <div className="flex items-center space-x-4">
+                <Link
+                  href="/login"
+                  className="text-white hover:text-gray-300 transition-colors"
+                >
+                  로그인
+                </Link>
+                <Link
+                  href="/signup"
+                  className="bg-white text-black px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
+                >
+                  회원가입
+                </Link>
+              </div>
             )}
           </div>
 
@@ -178,6 +232,34 @@ export default function Navbar() {
                 >
                   광고관리
                 </button>
+              )}
+              {user && (
+                <>
+                  <button
+                    onClick={() => handleNavigation('/mypage')}
+                    className={`${textColorClass} hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium w-full text-left`}
+                  >
+                    마이페이지
+                  </button>
+                  <button
+                    onClick={() => handleNavigation('/mypage/sales')}
+                    className={`${textColorClass} hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium w-full text-left`}
+                  >
+                    내 판매글 관리
+                  </button>
+                  <button
+                    onClick={() => handleNavigation('/sell')}
+                    className={`${textColorClass} hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium w-full text-left`}
+                  >
+                    드론 등록
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="text-red-600 hover:text-red-700 block px-3 py-2 rounded-md text-base font-medium w-full text-left"
+                  >
+                    로그아웃
+                  </button>
+                </>
               )}
             </div>
           </div>

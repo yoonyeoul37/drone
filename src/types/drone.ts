@@ -21,6 +21,7 @@ export interface Drone {
   level: DroneLevel;
   description: string;
   seller: {
+    id: string; // 판매자 ID
     name: string;
     rating: number;
   };
@@ -28,6 +29,7 @@ export interface Drone {
   imageUrl: string;
   postedAt: string;
   isPremium?: boolean;
+  status: 'active' | 'sold' | 'inactive'; // 판매 상태
 }
 
 export const priceRanges = [

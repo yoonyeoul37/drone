@@ -3,14 +3,15 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { sampleDrones } from '@/data/drones';
-import Navbar from '@/components/Navbar';
 import Image from 'next/image';
 import { DroneLevel } from '@/types/drone';
+import { useFavorite } from '@/contexts/FavoriteContext';
 
 export default function DroneDetailPage() {
   const params = useParams();
   const router = useRouter();
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const { addFavorite, removeFavorite, isFavorite } = useFavorite();
   
   const droneId = params.id as string;
   const drone = sampleDrones.find(d => d.id === parseInt(droneId, 10));
@@ -18,7 +19,6 @@ export default function DroneDetailPage() {
   if (!drone) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Navbar />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center py-12">
             <div className="text-gray-400 text-6xl mb-4">🚁</div>
@@ -106,7 +106,6 @@ export default function DroneDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
       
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* 뒤로가기 버튼 */}
@@ -215,8 +214,17 @@ export default function DroneDetailPage() {
                 >
                   판매자에게 연락하기
                 </button>
-                <button className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-6 rounded-lg transition-colors">
-                  <span className="mr-2">❤️</span>찜하기
+                <button
+                  className={`w-full ${isFavorite(drone.id) ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} font-medium py-3 px-6 rounded-lg transition-colors`}
+                  onClick={() => {
+                    if (isFavorite(drone.id)) {
+                      removeFavorite(drone.id);
+                    } else {
+                      addFavorite(drone);
+                    }
+                  }}
+                >
+                  <span className="mr-2">{isFavorite(drone.id) ? '❤️' : '🤍'}</span>{isFavorite(drone.id) ? '찜 해제' : '찜하기'}
                 </button>
               </div>
             </div>

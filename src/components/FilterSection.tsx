@@ -1,202 +1,120 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { droneBrands, droneLevels, DroneLevel } from '@/types/drone';
 
 interface FilterSectionProps {
   selectedBrand: string;
-  selectedPriceRange: number;
-  selectedFlightDistanceRange: number;
-  selectedLevel: string;
-  onBrandChange: (brand: string) => void;
-  onPriceRangeChange: (index: number) => void;
-  onFlightDistanceRangeChange: (index: number) => void;
-  onLevelChange: (level: string) => void;
+  selectedLevel: DroneLevel | '';
+  priceRange: [number, number];
+  onFilterChange: (brand: string, level: DroneLevel | '', priceRange: [number, number]) => void;
 }
 
 export default function FilterSection({
   selectedBrand,
-  selectedPriceRange,
-  selectedFlightDistanceRange,
   selectedLevel,
-  onBrandChange,
-  onPriceRangeChange,
-  onFlightDistanceRangeChange,
-  onLevelChange
+  priceRange,
+  onFilterChange,
 }: FilterSectionProps) {
+  const [localMinPrice, setLocalMinPrice] = useState(priceRange[0].toString());
+  const [localMaxPrice, setLocalMaxPrice] = useState(priceRange[1].toString());
+
+  useEffect(() => {
+    setLocalMinPrice(priceRange[0].toString());
+    setLocalMaxPrice(priceRange[1].toString());
+  }, [priceRange]);
+
+  const handlePriceChange = () => {
+    const min = parseInt(localMinPrice) || 0;
+    const max = parseInt(localMaxPrice) || 10000000;
+    onFilterChange(selectedBrand, selectedLevel, [min, max]);
+  };
+  
+  const handleReset = () => {
+    onFilterChange('', '', [0, 10000000]);
+  };
   
   const getLevelLabel = (level: DroneLevel) => {
     switch (level) {
-      case 'beginner':
-        return '입문용';
-      case 'intermediate':
-        return '중급자용';
-      case 'professional':
-        return '전문가용';
-      case 'industrial':
-        return '산업용';
-      default:
-        return level;
+      case 'beginner': return '입문용';
+      case 'intermediate': return '중급용';
+      case 'professional': return '전문가용';
+      case 'industrial': return '산업용';
+      default: return level;
     }
   };
-
-  const getLevelColor = (level: DroneLevel) => {
-    switch (level) {
-      case 'beginner':
-        return 'bg-cyan-100 text-cyan-800';
-      case 'intermediate':
-        return 'bg-purple-100 text-purple-800';
-      case 'professional':
-        return 'bg-red-100 text-red-800';
-      case 'industrial':
-        return 'bg-gray-700 text-white';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const handleResetFilters = () => {
-    onBrandChange('');
-    onPriceRangeChange(0);
-    onFlightDistanceRangeChange(0);
-    onLevelChange('');
-  };
-
-  const hasActiveFilters = selectedBrand || selectedPriceRange > 0 || selectedFlightDistanceRange > 0 || selectedLevel;
-
-  const priceRanges = [
-    { label: '전체', value: 0 },
-    { label: '10만원 이하', value: 1 },
-    { label: '10-30만원', value: 2 },
-    { label: '30-50만원', value: 3 },
-    { label: '50만원 이상', value: 4 }
-  ];
-
-  const flightDistanceRanges = [
-    { label: '전체', value: 0 },
-    { label: '1km 이하', value: 1 },
-    { label: '1-3km', value: 2 },
-    { label: '3-5km', value: 3 },
-    { label: '5km 이상', value: 4 }
-  ];
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">필터</h2>
-        {hasActiveFilters && (
+    <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* 사용자 수준 */}
+        <div className="lg:col-span-1">
+          <label htmlFor="level-filter" className="block text-sm font-medium text-gray-700">사용자 수준</label>
+          <select
+            id="level-filter"
+            value={selectedLevel}
+            onChange={(e) => onFilterChange(selectedBrand, e.target.value as DroneLevel | '', priceRange)}
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+          >
+            <option value="">전체</option>
+            {droneLevels.map(level => (
+              <option key={level} value={level}>{getLevelLabel(level)}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* 브랜드 */}
+        <div className="lg:col-span-1">
+          <label htmlFor="brand-filter" className="block text-sm font-medium text-gray-700">브랜드</label>
+          <select
+            id="brand-filter"
+            value={selectedBrand}
+            onChange={(e) => onFilterChange(e.target.value, selectedLevel, priceRange)}
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+          >
+            <option value="">전체</option>
+            {droneBrands.map(brand => (
+              <option key={brand} value={brand}>{brand}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* 가격 범위 */}
+        <div className="lg:col-span-2">
+          <label className="block text-sm font-medium text-gray-700">가격 범위 (원)</label>
+          <div className="flex items-center space-x-2 mt-1">
+            <input
+              type="number"
+              value={localMinPrice}
+              onChange={e => setLocalMinPrice(e.target.value)}
+              placeholder="최소 가격"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
+            />
+            <span className="text-gray-500">-</span>
+            <input
+              type="number"
+              value={localMaxPrice}
+              onChange={e => setLocalMaxPrice(e.target.value)}
+              placeholder="최대 가격"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
+            />
+            <button
+              onClick={handlePriceChange}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm flex-shrink-0"
+            >
+              적용
+            </button>
+          </div>
+        </div>
+        
+        {/* 초기화 버튼 */}
+        <div className="flex items-end justify-start lg:justify-end">
           <button
-            onClick={handleResetFilters}
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            onClick={handleReset}
+            className="w-full lg:w-auto px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm"
           >
             초기화
           </button>
-        )}
-      </div>
-      
-      {/* 사용자 수준 필터 */}
-      <div className="mb-6">
-        <h3 className="text-sm font-medium text-gray-700 mb-3">사용자 수준</h3>
-        <div className="space-y-2">
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="level"
-              value=""
-              checked={selectedLevel === ""}
-              onChange={(e) => onLevelChange(e.target.value)}
-              className="mr-2 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="text-sm text-gray-700">전체</span>
-          </label>
-          {droneLevels.map((level) => (
-            <label key={level} className="flex items-start">
-              <input
-                type="radio"
-                name="level"
-                value={level}
-                checked={selectedLevel === level}
-                onChange={(e) => onLevelChange(e.target.value)}
-                className="mr-2 mt-1 text-blue-600 focus:ring-blue-500"
-              />
-              <div className="flex-1">
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm font-medium text-gray-700">{getLevelLabel(level)}</span>
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${getLevelColor(level)}`}>
-                    {getLevelLabel(level)}
-                  </span>
-                </div>
-              </div>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* 브랜드 필터 */}
-      <div className="mb-6">
-        <h3 className="text-sm font-medium text-gray-700 mb-3">브랜드</h3>
-        <div className="space-y-2">
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="brand"
-              value=""
-              checked={selectedBrand === ""}
-              onChange={(e) => onBrandChange(e.target.value)}
-              className="mr-2 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="text-sm text-gray-700">전체</span>
-          </label>
-          {droneBrands.map((brand) => (
-            <label key={brand} className="flex items-center">
-              <input
-                type="radio"
-                name="brand"
-                value={brand}
-                checked={selectedBrand === brand}
-                onChange={(e) => onBrandChange(e.target.value)}
-                className="mr-2 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-700">{brand}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* 가격 범위 필터 */}
-      <div className="mb-6">
-        <h3 className="text-sm font-medium text-gray-700 mb-3">가격 범위</h3>
-        <div className="space-y-2">
-          {priceRanges.map((range) => (
-            <label key={range.value} className="flex items-center">
-              <input
-                type="radio"
-                name="priceRange"
-                checked={selectedPriceRange === range.value}
-                onChange={() => onPriceRangeChange(range.value)}
-                className="mr-2 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-700">{range.label}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* 비행 거리 필터 */}
-      <div className="mb-6">
-        <h3 className="text-sm font-medium text-gray-700 mb-3">최대 비행거리</h3>
-        <div className="space-y-2">
-          {flightDistanceRanges.map((range) => (
-            <label key={range.value} className="flex items-center">
-              <input
-                type="radio"
-                name="flightDistanceRange"
-                checked={selectedFlightDistanceRange === range.value}
-                onChange={() => onFlightDistanceRangeChange(range.value)}
-                className="mr-2 text-blue-600 focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-700">{range.label}</span>
-            </label>
-          ))}
         </div>
       </div>
     </div>
