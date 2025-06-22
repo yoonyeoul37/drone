@@ -9,12 +9,15 @@ import { categories } from '@/types/community';
 import { getRandomAd, inlineAds } from '@/data/ads';
 import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
+import { Plus, MessageCircle, Eye, Calendar, TrendingUp, Users, Filter } from 'lucide-react';
 
 export default function CommunityPage() {
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState<string>('전체');
   const [sortBy, setSortBy] = useState<'latest' | 'popular' | 'views'>('latest');
   const [isClient, setIsClient] = useState(false);
   const [randomInlineAd, setRandomInlineAd] = useState(inlineAds[0]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     setIsClient(true);
@@ -23,9 +26,21 @@ export default function CommunityPage() {
 
   const filteredPosts = useMemo(() => {
     let posts = samplePosts;
+    
+    // 카테고리 필터링
     if (selectedCategory !== '전체') {
       posts = posts.filter(post => post.category === selectedCategory);
     }
+    
+    // 검색어 필터링
+    if (searchTerm) {
+      posts = posts.filter(post => 
+        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.content.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    // 정렬
     switch (sortBy) {
       case 'latest':
         posts = [...posts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -38,7 +53,7 @@ export default function CommunityPage() {
         break;
     }
     return posts;
-  }, [selectedCategory, sortBy]);
+  }, [selectedCategory, sortBy, searchTerm]);
 
   // 광고가 포함된 렌더링할 아이템 목록 생성
   const itemsToRender = useMemo(() => {
@@ -53,130 +68,93 @@ export default function CommunityPage() {
     return items;
   }, [filteredPosts, isClient, randomInlineAd]);
 
+  const categoryOptions = [
+    { id: '전체', name: '전체', icon: <TrendingUp size={16} /> },
+    { id: '자유게시판', name: '자유게시판', icon: <MessageCircle size={16} /> },
+    { id: '구인', name: '구인', icon: <Users size={16} /> },
+    { id: '기타', name: '기타', icon: <MessageCircle size={16} /> },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 헤더 */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                드론 커뮤니티
-              </h1>
-              <p className="text-gray-600">
-                드론 애호가들과 자유롭게 이야기를 나누세요
-              </p>
-            </div>
-            <Link href="/community/write">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                글쓰기
-              </button>
-            </Link>
-          </div>
+    <div className="bg-gray-50 min-h-screen">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 헤더 섹션 */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">드론 커뮤니티</h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            드론 애호가들과 정보를 공유하고, 궁금한 점을 물어보세요. 
+            경험담부터 기술 팁까지 다양한 이야기를 나눠보세요.
+          </p>
+        </div>
 
-          {/* 카테고리 필터 */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            <button
-              onClick={() => setSelectedCategory('전체')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedCategory === '전체'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              전체
-            </button>
-            {categories.slice(1).map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-
-          {/* 정렬 옵션 */}
-          <div className="flex justify-between items-center">
-            <div className="text-sm text-gray-600">
-              총 <span className="font-semibold text-gray-900">{filteredPosts.length}</span>개의 게시글
+        {/* 검색 및 필터 섹션 */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            {/* 검색창 */}
+            <div className="flex-1 w-full sm:w-auto">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="게시글 검색..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                />
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600">정렬:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as 'latest' | 'popular' | 'views')}
-                className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="latest">최신순</option>
-                <option value="popular">인기순</option>
-                <option value="views">조회순</option>
-              </select>
+
+            {/* 카테고리 필터 */}
+            <div className="flex gap-2 flex-wrap">
+              {categoryOptions.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                    selectedCategory === category.id
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {category.icon}
+                  {category.name}
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
         {/* 게시글 목록 */}
-        {itemsToRender.length > 0 ? (
-          <div>
-            {itemsToRender.map((item) => {
-              if (item.type === 'post') {
-                return (
-                  <div key={item.id} className="mb-6">
-                    <PostCard post={item.data} />
-                  </div>
-                );
-              }
-              if (item.type === 'ad') {
-                return (
-                  <div key={item.id} className="mb-6">
-                    <InlineAd ad={item.data} size="small" />
-                  </div>
-                );
-              }
-              return null;
-            })}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <div className="text-gray-400 text-6xl mb-4">💬</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              게시글이 없습니다
-            </h3>
-            <p className="text-gray-600 mb-6">
-              {selectedCategory !== '전체' 
-                ? `${selectedCategory}에 게시글이 없습니다.`
-                : '아직 게시글이 없습니다.'
-              }
-            </p>
-            <Link href="/community/write">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
-                첫 번째 글 작성하기
-              </button>
-            </Link>
-          </div>
-        )}
-
-        {/* 페이지네이션 (간단한 버전) */}
-        {filteredPosts.length > 0 && (
-          <div className="mt-8 flex justify-center">
-            <div className="flex items-center space-x-2">
-              <button className="px-3 py-2 text-gray-500 hover:text-gray-700 disabled:opacity-50">
-                이전
-              </button>
-              <span className="px-3 py-2 bg-blue-600 text-white rounded-md">1</span>
-              <button className="px-3 py-2 text-gray-500 hover:text-gray-700 disabled:opacity-50">
-                다음
-              </button>
+        <div className="grid gap-6">
+          {filteredPosts.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-gray-400 mb-4">
+                <MessageCircle size={64} className="mx-auto" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">게시글이 없습니다</h3>
+              <p className="text-gray-500">첫 번째 게시글을 작성해보세요!</p>
             </div>
-          </div>
-        )}
-      </main>
+          ) : (
+            filteredPosts.map((post) => (
+              <div key={post.id} className="transform transition-all duration-300 hover:-translate-y-1">
+                <PostCard post={post} />
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* 글쓰기 버튼 */}
+        <button
+          onClick={() => router.push('/community/write')}
+          className="fixed bottom-8 right-8 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 z-50 group"
+        >
+          <Plus size={24} className="transition-transform group-hover:rotate-90" />
+        </button>
+      </div>
     </div>
   );
 } 

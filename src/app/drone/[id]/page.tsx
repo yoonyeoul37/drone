@@ -6,12 +6,14 @@ import { sampleDrones } from '@/data/drones';
 import Image from 'next/image';
 import { DroneLevel } from '@/types/drone';
 import { useFavorite } from '@/contexts/FavoriteContext';
+import { Calendar, CheckCircle, ChevronLeft, Clock, Compass, Heart, MessageCircle, Star, TrendingUp, Zap } from 'lucide-react';
 
 export default function DroneDetailPage() {
   const params = useParams();
   const router = useRouter();
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const { addFavorite, removeFavorite, isFavorite } = useFavorite();
+  const [mainImage, setMainImage] = useState(null);
   
   const droneId = params.id as string;
   const drone = sampleDrones.find(d => d.id === parseInt(droneId, 10));
@@ -39,6 +41,12 @@ export default function DroneDetailPage() {
       </div>
     );
   }
+
+  useState(() => {
+    if (drone) {
+      setMainImage(drone.imageUrl);
+    }
+  });
 
   const getConditionColor = (condition: string) => {
     switch (condition) {
@@ -105,40 +113,40 @@ export default function DroneDetailPage() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen overflow-y-auto">
+    <div className="bg-gray-50 min-h-screen">
       
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-16">
-        {/* 뒤로가기 버튼 */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <button
           onClick={() => router.back()}
-          className="flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+          className="flex items-center text-gray-600 hover:text-gray-900 mb-6 group"
         >
-          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
+          <ChevronLeft className="w-5 h-5 mr-1 transition-transform group-hover:-translate-x-1" />
           목록으로 돌아가기
         </button>
 
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* 이미지 섹션 */}
             <div className="p-4 sm:p-6">
-              <div className="relative bg-gray-200 rounded-lg h-96 w-full overflow-hidden">
+              <div className="relative bg-gray-200 rounded-xl h-96 w-full overflow-hidden group cursor-pointer" onClick={() => setIsContactModalOpen(true)}>
                 <Image
-                    src={drone.imageUrl}
+                    src={mainImage || drone.imageUrl}
                     alt={drone.name}
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
+                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
+                  <p className="text-white text-lg font-bold opacity-0 group-hover:opacity-100 transition-opacity">이미지 확대</p>
+                </div>
               </div>
               
-              {/* 추가 이미지들 (임시) */}
               <div className="grid grid-cols-4 gap-2 mt-4">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="relative bg-gray-200 rounded h-20 w-full overflow-hidden">
+                {[drone.imageUrl, ...Array(3).fill("https://placehold.co/200x200")].map((img, i) => (
+                  <div key={i} className={`relative bg-gray-200 rounded-lg h-20 w-full overflow-hidden cursor-pointer border-2 ${mainImage === img ? 'border-blue-500' : 'border-transparent hover:border-blue-400'}`}
+                       onClick={() => setMainImage(img)}>
                      <Image
-                        src={drone.imageUrl} // 임시로 같은 이미지 사용
+                        src={img}
                         alt={`${drone.name} 서브 이미지 ${i + 1}`}
                         fill
                         sizes="25vw"
@@ -150,57 +158,62 @@ export default function DroneDetailPage() {
             </div>
 
             {/* 정보 섹션 */}
-            <div className="p-4 sm:p-6">
-              {/* 브랜드, 상태, 레벨 */}
-              <div className="flex justify-between items-start mb-2">
-                <span className="text-lg font-medium text-blue-600">{drone.brand}</span>
+            <div className="p-4 sm:p-8 flex flex-col">
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-base font-bold text-blue-600">{drone.brand}</span>
                 <div className="flex items-center gap-2">
-                    <span className={`px-3 py-1 text-sm font-medium rounded-full ${getConditionColor(drone.condition)}`}>
+                    <span className={`px-3 py-1 text-sm font-bold rounded-full ${getConditionColor(drone.condition)}`}>
                         {getConditionText(drone.condition)}
                     </span>
-                    <span className={`px-3 py-1 text-sm font-medium rounded-full ${getLevelColor(drone.level)}`}>
+                    <span className={`px-3 py-1 text-sm font-bold rounded-full ${getLevelColor(drone.level)}`}>
                         {getLevelText(drone.level)}
                     </span>
                 </div>
               </div>
 
-              {/* 제품명 */}
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">{drone.name}</h1>
+              <h1 className="text-4xl font-extrabold text-gray-900 mb-2">{drone.name}</h1>
               
-              <div className="text-sm text-gray-500 mb-4">
-                게시일: {drone.postedAt}
+              <div className="text-sm text-gray-500 mb-4 flex items-center gap-2">
+                <Calendar size={14} />
+                <span>게시일: {drone.postedAt}</span>
               </div>
 
-              {/* 가격 */}
-              <div className="text-4xl font-extrabold text-gray-900 my-4">
+              <div className="text-5xl font-black text-gray-900 my-4">
                 {formatPrice(drone.price)}원
-                {drone.negotiable && drone.minPrice && (
-                  <div className="text-lg font-normal text-gray-600 mt-2">
-                    ~ {formatPrice(drone.minPrice)}원까지 협상 가능
+              </div>
+              
+              <div className="flex-grow"></div>
+
+              <div className="grid grid-cols-2 gap-x-4 gap-y-3 mt-6">
+                 {drone.negotiable && (
+                  <div className="flex items-center gap-2 text-green-600 font-semibold text-sm col-span-2">
+                    <CheckCircle size={16} />
+                    <span>가격 협상 가능 (최소 {formatPrice(drone.minPrice!)}원)</span>
                   </div>
                 )}
-                {!drone.negotiable && (
-                  <div className="text-lg font-normal text-red-600 mt-2">
-                    가격 고정
+                 {!drone.negotiable && (
+                  <div className="flex items-center gap-2 text-red-600 font-semibold text-sm col-span-2">
+                    <CheckCircle size={16} />
+                    <span>가격 고정</span>
                   </div>
                 )}
-                {drone.originalPrice && (
-                  <div className="text-lg font-normal text-gray-500 line-through mt-1">
+                 {drone.originalPrice && (
+                  <div className="text-gray-500 line-through text-sm col-span-2">
                     원래가: {formatPrice(drone.originalPrice)}원
                   </div>
                 )}
               </div>
-              
-              {/* 버튼들 */}
-              <div className="space-y-3">
+
+              <div className="space-y-3 mt-6">
                 <button
                   onClick={() => router.push(`/chat/${drone.id}`)}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                 >
+                  <MessageCircle size={20} />
                   판매자와 채팅하기
                 </button>
                 <button
-                  className={`w-full ${isFavorite(drone.id) ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} font-medium py-3 px-6 rounded-lg transition-colors`}
+                  className={`w-full ${isFavorite(drone.id) ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} font-bold py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2`}
                   onClick={() => {
                     if (isFavorite(drone.id)) {
                       removeFavorite(drone.id);
@@ -209,115 +222,76 @@ export default function DroneDetailPage() {
                     }
                   }}
                 >
-                  <span className="mr-2">{isFavorite(drone.id) ? '❤️' : '🤍'}</span>{isFavorite(drone.id) ? '찜 해제' : '찜하기'}
+                  <Heart size={20} className={`transition-all ${isFavorite(drone.id) ? 'text-white fill-white' : 'text-red-500'}`} />
+                  {isFavorite(drone.id) ? '찜 해제' : '찜하기'}
                 </button>
               </div>
             </div>
           </div>
 
-          {/* 스펙 및 설명 */}
-          <div className="p-4 sm:p-8 border-t">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* 주요 스펙 */}
+          <div className="p-6 sm:p-8 border-t">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
                 <div>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-4">주요 정보</h2>
-                    <div className="grid grid-cols-2 gap-y-3 text-sm">
-                        <dt className="font-medium text-gray-500">출시년도</dt>
-                        <dd className="text-gray-900 font-semibold">{drone.releaseYear}년</dd>
-                        
-                        {drone.purchaseYear && (
-                          <>
-                            <dt className="font-medium text-gray-500">구매년도</dt>
-                            <dd className="text-gray-900 font-semibold">{drone.purchaseYear}년</dd>
-                          </>
-                        )}
-                        
-                        <dt className="font-medium text-gray-500">소유주</dt>
-                        <dd className="text-gray-900 font-semibold">{drone.ownerCount}차 소유주</dd>
-                        
-                        <dt className="font-medium text-gray-500">최대 비행거리</dt>
-                        <dd className="text-gray-900 font-semibold">{drone.flightDistance} km</dd>
-                        
-                        <dt className="font-medium text-gray-500">총 비행시간</dt>
-                        <dd className="text-gray-900 font-semibold">{drone.totalFlightTime} 시간</dd>
-
-                        <dt className="font-medium text-gray-500">총 비행거리</dt>
-                        <dd className="text-gray-900 font-semibold">{drone.totalFlightDistance} km</dd>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">주요 정보</h2>
+                    <div className="space-y-4 text-base">
+                        <div className="flex items-center gap-4">
+                          <Zap className="text-blue-500" size={24} />
+                          <div>
+                            <dt className="font-medium text-gray-500">최대 비행거리</dt>
+                            <dd className="text-gray-900 font-bold text-lg">{drone.flightDistance} km</dd>
+                          </div>
+                        </div>
+                         <div className="flex items-center gap-4">
+                          <TrendingUp className="text-blue-500" size={24} />
+                          <div>
+                            <dt className="font-medium text-gray-500">총 비행거리</dt>
+                            <dd className="text-gray-900 font-bold text-lg">{drone.totalFlightDistance} km</dd>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <Clock className="text-blue-500" size={24} />
+                          <div>
+                            <dt className="font-medium text-gray-500">총 비행시간</dt>
+                            <dd className="text-gray-900 font-bold text-lg">{drone.totalFlightTime} 시간</dd>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <Compass className="text-blue-500" size={24} />
+                          <div>
+                            <dt className="font-medium text-gray-500">지역</dt>
+                            <dd className="text-gray-900 font-bold text-lg">{drone.location}</dd>
+                          </div>
+                        </div>
                     </div>
                 </div>
-                {/* 상세 설명 */}
                 <div>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-4">상품 설명</h2>
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                    {drone.description}
-                    </p>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">상품 설명</h2>
+                    <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
+                      {drone.description}
+                    </div>
                 </div>
              </div>
           </div>
         </div>
 
-        {/* 추가 여백을 위한 더미 컨텐츠 */}
-        <div className="h-20"></div>
-
-        {/* 연락하기 모달 */}
+        {/* 이미지 확대 모달 */}
         {isContactModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                판매자에게 연락하기
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    연락 방법
-                  </label>
-                  <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option>카카오톡</option>
-                    <option>전화</option>
-                    <option>이메일</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    연락처
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="연락처를 입력하세요"
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    메시지
-                  </label>
-                  <textarea
-                    rows={3}
-                    placeholder="문의 내용을 입력하세요"
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </div>
-              <div className="flex space-x-3 mt-6">
-                <button
-                  onClick={() => setIsContactModalOpen(false)}
-                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-md transition-colors"
-                >
-                  취소
-                </button>
-                <button
-                  onClick={() => {
-                    alert('연락 요청이 전송되었습니다!');
-                    setIsContactModalOpen(false);
-                  }}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
-                >
-                  전송
-                </button>
-              </div>
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" onClick={() => setIsContactModalOpen(false)}>
+            <div className="relative max-w-4xl max-h-full" onClick={(e) => e.stopPropagation()}>
+               <Image
+                    src={mainImage || drone.imageUrl}
+                    alt={drone.name}
+                    width={1200}
+                    height={800}
+                    className="object-contain rounded-lg shadow-2xl"
+                />
+                 <button onClick={() => setIsContactModalOpen(false)} className="absolute top-4 right-4 text-white bg-black bg-opacity-50 rounded-full p-2">
+                   &times;
+                 </button>
             </div>
           </div>
         )}
+
       </main>
     </div>
   );

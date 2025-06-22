@@ -1,60 +1,95 @@
 import { Post } from '@/types/community';
-import { categories } from '@/types/community';
 import Link from 'next/link';
-import Image from 'next/image';
+import { MessageCircle, Eye, Calendar, User, TrendingUp } from 'lucide-react';
 
 interface PostCardProps {
   post: Post;
 }
 
 export default function PostCard({ post }: PostCardProps) {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
-    if (diffInHours < 1) {
-      return '방금 전';
-    } else if (diffInHours < 24) {
-      return `${diffInHours}시간 전`;
-    } else if (diffInHours < 168) { // 7일
-      return `${Math.floor(diffInHours / 24)}일 전`;
-    } else {
-      return date.toLocaleDateString('ko-KR');
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case '자유게시판':
+        return 'bg-blue-100 text-blue-800';
+      case '구인':
+        return 'bg-green-100 text-green-800';
+      case '기타':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case '자유게시판':
+        return <MessageCircle size={14} />;
+      case '구인':
+        return <User size={14} />;
+      case '기타':
+        return <TrendingUp size={14} />;
+      default:
+        return <MessageCircle size={14} />;
     }
   };
 
   return (
     <Link href={`/community/post/${post.id}`}>
-      <div className="bg-white rounded-lg p-6 transition-shadow duration-300 cursor-pointer border border-gray-200 shadow-sm hover:shadow-lg">
-        {/* 헤더 */}
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-              <span className="text-gray-600 text-sm font-medium">
-                {post.author.charAt(0)}
+      <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group cursor-pointer">
+        <div className="p-6">
+          {/* 헤더 */}
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${getCategoryColor(post.category)}`}>
+                {getCategoryIcon(post.category)}
+                {post.category}
               </span>
+              {post.isHot && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                  🔥 인기
+                </span>
+              )}
             </div>
-            <div>
-              <div className="font-medium text-gray-900">{post.author}</div>
-              <div className="text-sm text-gray-500">{formatDate(post.date)}</div>
+            <div className="text-sm text-gray-500 flex items-center gap-1">
+              <Calendar size={14} />
+              {post.createdAt}
             </div>
           </div>
-          <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-            {post.category}
-          </span>
-        </div>
 
-        {/* 제목 */}
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 line-clamp-2">
-          {post.title}
-        </h3>
+          {/* 제목 */}
+          <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2">
+            {post.title}
+          </h3>
 
-        {/* 통계 */}
-        <div className="flex items-center justify-between text-sm text-gray-500 border-t pt-4">
-          <div className="flex items-center space-x-4">
-            <span>❤️ {post.likes}</span>
-            <span>💬 {post.comments}</span>
+          {/* 내용 미리보기 */}
+          <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+            {post.content}
+          </p>
+
+          {/* 하단 정보 */}
+          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+            <div className="flex items-center gap-4 text-sm text-gray-500">
+              <div className="flex items-center gap-1">
+                <User size={14} />
+                <span className="font-medium">{post.author}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <MessageCircle size={14} />
+                <span>{post.commentCount}개 댓글</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Eye size={14} />
+                <span>{post.viewCount}회 조회</span>
+              </div>
+            </div>
+            
+            {/* 좋아요 */}
+            {post.likeCount > 0 && (
+              <div className="flex items-center gap-1 text-sm text-red-500 font-medium">
+                <span>❤️</span>
+                <span>{post.likeCount}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
