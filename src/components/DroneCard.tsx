@@ -128,7 +128,6 @@ export default function DroneCard({ drone }: DroneCardProps) {
 
         <div className="text-sm text-gray-700 mb-4 border-t pt-3">
           <div>📍 {drone.location}</div>
-          <div>👤 {drone.seller.name} (평점: {drone.seller.rating}점)</div>
           <div className="mt-1 text-xs text-gray-600">게시일: {drone.postedAt}</div>
         </div>
         

@@ -21,7 +21,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '1',
       name: '드론마스터',
-      rating: 4.8
     },
     location: '서울시 강남구',
     imageUrl: 'https://placehold.co/600x400?text=DJI+Mini+3+Pro',
@@ -47,7 +46,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '2',
       name: '항공촬영전문',
-      rating: 4.5
     },
     location: '부산시 해운대구',
     imageUrl: 'https://placehold.co/600x400?text=Parrot+Anafi',
@@ -75,7 +73,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '1',
       name: '드론스토어',
-      rating: 5.0
     },
     location: '대구시 수성구',
     imageUrl: 'https://placehold.co/600x400?text=Autel+EVO+II',
@@ -102,7 +99,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '3',
       name: '드론초보',
-      rating: 4.2
     },
     location: '인천시 연수구',
     imageUrl: 'https://placehold.co/600x400?text=Holy+Stone+HS720E',
@@ -129,7 +125,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '4',
       name: '프로드론',
-      rating: 4.9
     },
     location: '서울시 마포구',
     imageUrl: 'https://placehold.co/600x400?text=DJI+Air+2S',
@@ -156,7 +151,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '5',
       name: '스포츠촬영',
-      rating: 4.6
     },
     location: '광주시 서구',
     imageUrl: 'https://placehold.co/600x400?text=Skydio+2',
@@ -183,7 +177,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '6',
       name: '중고드론전문',
-      rating: 4.3
     },
     location: '대전시 유성구',
     imageUrl: 'https://placehold.co/600x400?text=Yuneec+Typhoon+H',
@@ -210,7 +203,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '7',
       name: '드론입문자',
-      rating: 4.4
     },
     location: '울산시 남구',
     imageUrl: 'https://placehold.co/600x400?text=Potensic+D88',
@@ -237,7 +229,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '8',
       name: '산업드론전문',
-      rating: 4.9,
     },
     location: '서울시 송파구',
     imageUrl: 'https://placehold.co/600x400?text=DJI+Matrice+300',
@@ -264,7 +255,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '8',
       name: '산업드론전문',
-      rating: 4.9,
     },
     location: '부산시 동래구',
     imageUrl: 'https://placehold.co/600x400?text=Parrot+Anafi+USA',
@@ -291,7 +281,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '9',
       name: '다재다능드론',
-      rating: 4.7,
     },
     location: '제주도 제주시',
     imageUrl: 'https://placehold.co/600x400?text=PowerVision+PowerEgg+X',
@@ -317,7 +306,6 @@ export const sampleDrones: Drone[] = [
     seller: {
       id: '10',
       name: '미니드론컬렉터',
-      rating: 4.8,
     },
     location: '경기도 성남시',
     imageUrl: 'https://placehold.co/600x400?text=Fimi+X8+Mini',

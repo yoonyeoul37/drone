@@ -5,6 +5,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { FavoriteProvider } from "@/contexts/FavoriteContext";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import { Toaster } from 'react-hot-toast';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <FavoriteProvider>
+            <Toaster position="top-center" reverseOrder={false} />
             <Navbar />
             <main>{children}</main>
             <footer className="bg-gray-800 text-white py-8">

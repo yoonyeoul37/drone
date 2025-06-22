@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { categories } from '@/types/community';
+import toast from 'react-hot-toast';
 
 export default function WritePostPage() {
   const router = useRouter();
@@ -15,8 +16,10 @@ export default function WritePostPage() {
     // In a real application, you would handle the form submission,
     // for example, by sending the data to an API endpoint.
     console.log({ title, category, content });
-    alert('게시글이 등록되었습니다.');
-    router.push('/community');
+    toast.success('게시글이 성공적으로 등록되었습니다.');
+    setTimeout(() => {
+      router.push('/community');
+    }, 1000); // 1초 후 페이지 이동
   };
 
   const postCategories = categories.filter(cat => cat !== '전체');

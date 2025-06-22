@@ -30,21 +30,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // 실제로는 여기서 API 호출을 하겠지만, 지금은 시뮬레이션
     return new Promise((resolve) => {
       setTimeout(() => {
-        if (email === 'test@example.com' && password === 'password') {
-          const mockUser: User = {
-            id: '1',
-            email: email,
-            name: '테스트 사용자',
+        if (email === 'test@test.com' && password === '1234') {
+          const user: User = {
+            id: 'test-user',
+            email: 'test@test.com',
+            name: '테스트유저',
             phone: '010-1234-5678',
-            rating: 4.5,
-            joinDate: '2024-01-01',
+            joinDate: '2023-01-01',
             isVerified: true,
-            profileImage: '/images/default-avatar.png'
+            profileImage: 'https://placehold.co/100x100?text=User',
           };
           
-          setUser(mockUser);
+          setUser(user);
           setIsLoggedIn(true);
-          localStorage.setItem('user', JSON.stringify(mockUser));
+          localStorage.setItem('user', JSON.stringify(user));
           resolve(true);
         } else {
           resolve(false);

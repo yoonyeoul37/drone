@@ -2,11 +2,10 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  phone?: string;
-  rating: number;
+  phone: string;
   joinDate: string;
   isVerified: boolean;
-  profileImage?: string;
+  profileImage: string;
 }
 
 export interface LoginFormData {

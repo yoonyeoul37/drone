@@ -5,6 +5,7 @@ import AdBanner from '@/components/AdBanner';
 import SidebarAd from '@/components/SidebarAd';
 import InlineAd from '@/components/InlineAd';
 import { bannerAds, sidebarAds, inlineAds, Ad, getAdStats } from '@/data/ads';
+import toast from 'react-hot-toast';
 
 export default function AdsAdminPage() {
   const [activeTab, setActiveTab] = useState('banner');
@@ -34,7 +35,7 @@ export default function AdsAdminPage() {
   const handleDeleteAd = (adId: number) => {
     if (confirm('정말로 이 광고를 삭제하시겠습니까?')) {
       // 실제로는 API 호출로 삭제
-      alert('광고가 삭제되었습니다.');
+      toast.success('광고가 삭제되었습니다.');
     }
   };
 
@@ -182,7 +183,7 @@ export default function AdsAdminPage() {
               </button>
               <button
                 onClick={() => {
-                  alert('광고가 수정되었습니다.');
+                  toast.success('광고가 수정되었습니다.');
                   setIsEditModalOpen(false);
                 }}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"

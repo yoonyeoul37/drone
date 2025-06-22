@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { useAuth } from './AuthContext';
 import { Favorite, FavoriteContextType } from '@/types/favorite';
 import { Drone } from '@/types/drone';
+import toast from 'react-hot-toast';
 
 const FavoriteContext = createContext<FavoriteContextType | undefined>(undefined);
 
@@ -51,10 +52,14 @@ export function FavoriteProvider({ children }: { children: ReactNode }) {
     };
 
     setFavorites(prev => [...prev, newFavorite]);
+    localStorage.setItem(`favorites_${user!.id}`, JSON.stringify([...favorites, newFavorite]));
+    toast.success(`${drone.name}을(를) 찜 목록에 추가했습니다.`);
   };
 
   const removeFavorite = (droneId: number) => {
     setFavorites(prev => prev.filter(fav => fav.droneId !== droneId));
+    localStorage.setItem(`favorites_${user!.id}`, JSON.stringify(favorites.filter(fav => fav.droneId !== droneId)));
+    toast.error('찜 목록에서 제거했습니다.');
   };
 
   const isFavorite = (droneId: number): boolean => {
