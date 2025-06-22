@@ -134,7 +134,8 @@ export default function HomePage() {
               </span>
             </p>
             
-            {/* 통계 카드들 */}
+            {/* 통계 카드들 (주석 처리) */}
+            {/*
             <div className="flex flex-wrap justify-center gap-6 mb-12">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-4 border border-white/20 animate-pulse">
                 <div className="text-2xl font-bold text-blue-300">1,234+</div>
@@ -149,6 +150,7 @@ export default function HomePage() {
                 <div className="text-sm text-gray-300">활성 회원</div>
               </div>
             </div>
+            */}
             
             {/* 액션 버튼들 */}
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
