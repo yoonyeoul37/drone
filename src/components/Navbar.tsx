@@ -10,12 +10,12 @@ export default function Navbar() {
   const { user, isLoggedIn, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(true);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      setHasScrolled(window.scrollY > 10);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -36,9 +36,11 @@ export default function Navbar() {
     router.push('/');
   };
 
-  const navClass = isScrolled
-    ? 'fixed top-0 left-0 right-0 z-50 bg-gray-900/90 backdrop-blur-md shadow-lg transition-all duration-300'
-    : 'fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md transition-all duration-300';
+  const navClass = `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    hasScrolled
+      ? 'bg-white/80 backdrop-blur-sm shadow-lg rounded-b-2xl'
+      : 'bg-transparent'
+  }`;
 
   const linkClass = 'text-gray-200';
   const logoClass = 'bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text';
