@@ -1,30 +1,27 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { bannerAds as defaultAds } from '@/data/ads';
+import { Ad } from '@/types/ad';
 
 interface AdBannerProps {
-  ads: {
-    id: number;
-    title: string;
-    description: string;
-    image: string;
-    link: string;
-    backgroundColor: string;
-  }[];
+  ads?: Ad[];
 }
 
-export default function AdBanner({ ads }: AdBannerProps) {
+export default function AdBanner({ ads = defaultAds }: AdBannerProps) {
   const [currentAd, setCurrentAd] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
 
   // 자동 슬라이드
   useEffect(() => {
+    if (!ads || ads.length === 0) return;
+
     const interval = setInterval(() => {
       setCurrentAd((prev) => (prev + 1) % ads.length);
     }, 5000); // 5초마다 변경
 
     return () => clearInterval(interval);
-  }, [ads.length]);
+  }, [ads]);
 
   // 수동 슬라이드
   const goToSlide = (index: number) => {
@@ -35,7 +32,7 @@ export default function AdBanner({ ads }: AdBannerProps) {
     setIsVisible(false);
   };
 
-  if (!isVisible) return null;
+  if (!isVisible || !ads || ads.length === 0) return null;
 
   return (
     <div className="relative bg-gray-100 shadow-md overflow-hidden mb-8">

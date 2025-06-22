@@ -105,9 +105,9 @@ export default function DroneDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-gray-50 min-h-screen overflow-y-auto">
       
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-16">
         {/* 뒤로가기 버튼 */}
         <button
           onClick={() => router.back()}
@@ -150,7 +150,7 @@ export default function DroneDetailPage() {
             </div>
 
             {/* 정보 섹션 */}
-            <div className="p-4 sm:p-6 flex flex-col">
+            <div className="p-4 sm:p-6">
               {/* 브랜드, 상태, 레벨 */}
               <div className="flex justify-between items-start mb-2">
                 <span className="text-lg font-medium text-blue-600">{drone.brand}</span>
@@ -207,7 +207,7 @@ export default function DroneDetailPage() {
               </div>
 
               {/* 버튼들 */}
-              <div className="space-y-3 mt-auto">
+              <div className="space-y-3">
                 <button
                   onClick={() => setIsContactModalOpen(true)}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105"
@@ -270,6 +270,9 @@ export default function DroneDetailPage() {
              </div>
           </div>
         </div>
+
+        {/* 추가 여백을 위한 더미 컨텐츠 */}
+        <div className="h-20"></div>
 
         {/* 연락하기 모달 */}
         {isContactModalOpen && (

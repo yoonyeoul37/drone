@@ -3,31 +3,20 @@ export interface Post {
   title: string;
   content: string;
   author: string;
-  authorAvatar: string;
-  category: 'general' | 'review' | 'question' | 'news' | 'tips';
-  createdAt: string;
-  updatedAt: string;
+  date: string;
+  category: string;
   likes: number;
   comments: number;
-  views: number;
-  tags: string[];
-}
-
-export interface Comment {
-  id: string;
-  postId: string;
-  content: string;
-  author: string;
-  authorAvatar: string;
-  createdAt: string;
-  likes: number;
-  replies?: Comment[];
+  image?: string;
 }
 
 export const categories = [
-  { value: 'general', label: '자유게시판', color: 'bg-blue-100 text-blue-800' },
-  { value: 'review', label: '리뷰', color: 'bg-green-100 text-green-800' },
-  { value: 'question', label: '질문', color: 'bg-yellow-100 text-yellow-800' },
-  { value: 'news', label: '뉴스', color: 'bg-purple-100 text-purple-800' },
-  { value: 'tips', label: '팁', color: 'bg-orange-100 text-orange-800' }
-] as const; 
+  '전체',
+  '드론 리뷰',
+  '비행 팁',
+  '법규 정보',
+  '장비 추천',
+  '커스텀 빌드',
+  '사진/영상',
+  '기타'
+]; 

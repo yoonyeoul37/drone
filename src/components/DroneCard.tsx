@@ -72,7 +72,7 @@ export default function DroneCard({ drone }: DroneCardProps) {
   };
 
   return (
-    <div className={`relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col ${drone.isPremium ? 'border-2 border-yellow-400' : ''}`}>
+    <div className={`relative rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col ${drone.isPremium ? 'bg-yellow-50' : 'bg-white'}`}>
       {drone.isPremium && (
         <div className="absolute top-2 right-2 bg-yellow-400 text-white text-xs font-bold px-2 py-1 rounded-md z-10 shadow-md">
           추천
@@ -111,24 +111,9 @@ export default function DroneCard({ drone }: DroneCardProps) {
 
         <div className="text-xl font-bold text-gray-900 mb-3">
           {formatPrice(drone.price)}원
-          {drone.negotiable && drone.minPrice && (
-            <div className="text-sm font-normal text-gray-600">
-              ~ {formatPrice(drone.minPrice)}원까지 협상 가능
-            </div>
-          )}
-          {!drone.negotiable && (
-            <div className="text-sm font-normal text-red-600">
-              가격 고정
-            </div>
-          )}
-          {drone.originalPrice && (
-            <div className="text-sm font-normal text-gray-500 line-through">
-              원래가: {formatPrice(drone.originalPrice)}원
-            </div>
-          )}
         </div>
 
-        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 mb-3 border-t pt-3">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-800 mb-3 border-t pt-3">
           <div className="font-semibold">출시년도</div><div>{drone.releaseYear}년</div>
           {drone.purchaseYear && (
             <>
@@ -141,10 +126,10 @@ export default function DroneCard({ drone }: DroneCardProps) {
           <div className="font-semibold">총 비행거리</div><div>{drone.totalFlightDistance} km</div>
         </div>
 
-        <div className="text-sm text-gray-500 mb-4 border-t pt-3">
+        <div className="text-sm text-gray-700 mb-4 border-t pt-3">
           <div>📍 {drone.location}</div>
           <div>👤 {drone.seller.name} (평점: {drone.seller.rating}점)</div>
-          <div className="mt-1 text-xs text-gray-400">게시일: {drone.postedAt}</div>
+          <div className="mt-1 text-xs text-gray-600">게시일: {drone.postedAt}</div>
         </div>
         
         <div className="mt-auto">

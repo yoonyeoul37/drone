@@ -11,7 +11,7 @@ import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
 
 export default function CommunityPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>('전체');
   const [sortBy, setSortBy] = useState<'latest' | 'popular' | 'views'>('latest');
   const [isClient, setIsClient] = useState(false);
   const [randomInlineAd, setRandomInlineAd] = useState(inlineAds[0]);
@@ -23,18 +23,18 @@ export default function CommunityPage() {
 
   const filteredPosts = useMemo(() => {
     let posts = samplePosts;
-    if (selectedCategory !== 'all') {
+    if (selectedCategory !== '전체') {
       posts = posts.filter(post => post.category === selectedCategory);
     }
     switch (sortBy) {
       case 'latest':
-        posts = [...posts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        posts = [...posts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         break;
       case 'popular':
         posts = [...posts].sort((a, b) => b.likes - a.likes);
         break;
       case 'views':
-        posts = [...posts].sort((a, b) => b.views - a.views);
+        posts = [...posts].sort((a, b) => b.comments - a.comments);
         break;
     }
     return posts;
@@ -44,7 +44,7 @@ export default function CommunityPage() {
   const itemsToRender = useMemo(() => {
     const items: (any)[] = [];
     filteredPosts.forEach((post, index) => {
-      items.push({ type: 'post', data: post });
+      items.push({ type: 'post', data: post, id: `post-${post.id}` });
       // 2번째 게시글 뒤 (index === 1)에 광고 삽입
       if (isClient && index === 1 && filteredPosts.length > 2) {
         items.push({ type: 'ad', data: randomInlineAd, id: `ad-${index}` });
@@ -77,26 +77,26 @@ export default function CommunityPage() {
           {/* 카테고리 필터 */}
           <div className="flex flex-wrap gap-2 mb-6">
             <button
-              onClick={() => setSelectedCategory('all')}
+              onClick={() => setSelectedCategory('전체')}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedCategory === 'all'
+                selectedCategory === '전체'
                   ? 'bg-blue-600 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
             >
               전체
             </button>
-            {categories.map((category) => (
+            {categories.slice(1).map((category) => (
               <button
-                key={category.value}
-                onClick={() => setSelectedCategory(category.value)}
+                key={category}
+                onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedCategory === category.value
+                  selectedCategory === category
                     ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                {category.label}
+                {category}
               </button>
             ))}
           </div>
@@ -127,7 +127,7 @@ export default function CommunityPage() {
             {itemsToRender.map((item) => {
               if (item.type === 'post') {
                 return (
-                  <div key={item.data.id} className="mb-6">
+                  <div key={item.id} className="mb-6">
                     <PostCard post={item.data} />
                   </div>
                 );
@@ -149,8 +149,8 @@ export default function CommunityPage() {
               게시글이 없습니다
             </h3>
             <p className="text-gray-600 mb-6">
-              {selectedCategory !== 'all' 
-                ? `${categories.find(cat => cat.value === selectedCategory)?.label}에 게시글이 없습니다.`
+              {selectedCategory !== '전체' 
+                ? `${selectedCategory}에 게시글이 없습니다.`
                 : '아직 게시글이 없습니다.'
               }
             </p>

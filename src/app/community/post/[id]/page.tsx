@@ -10,7 +10,7 @@ export default function PostDetailPage() {
   const params = useParams();
   const router = useRouter();
   const postId = params.id as string;
-  const post = samplePosts.find(p => p.id === parseInt(postId, 10));
+  const post = samplePosts.find(p => p.id === postId);
 
   if (!post) {
     return (

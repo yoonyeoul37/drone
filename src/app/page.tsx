@@ -56,6 +56,9 @@ export default function HomePage() {
           Your browser does not support the video tag.
         </video>
         
+        {/* 얇은 오버레이 */}
+        <div className="absolute inset-0 bg-black/50" style={{ zIndex: 1 }}></div>
+        
         {/* 콘텐츠 */}
         <div className="relative flex items-center justify-center h-full" style={{ zIndex: 2 }}>
           <div className="text-center text-white animate-fade-in-up">
