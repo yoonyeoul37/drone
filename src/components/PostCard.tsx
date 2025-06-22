@@ -32,7 +32,7 @@ export default function PostCard({ post }: PostCardProps) {
 
   return (
     <Link href={`/community/post/${post.id}`}>
-      <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+      <div className="bg-white rounded-lg p-6 transition-shadow duration-300 cursor-pointer border border-gray-200 shadow-sm hover:shadow-lg">
         {/* 헤더 */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center space-x-3">

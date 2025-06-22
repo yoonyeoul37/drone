@@ -175,6 +175,21 @@ export default function DroneDetailPage() {
               {/* 가격 */}
               <div className="text-4xl font-extrabold text-gray-900 my-4">
                 {formatPrice(drone.price)}원
+                {drone.negotiable && drone.minPrice && (
+                  <div className="text-lg font-normal text-gray-600 mt-2">
+                    ~ {formatPrice(drone.minPrice)}원까지 협상 가능
+                  </div>
+                )}
+                {!drone.negotiable && (
+                  <div className="text-lg font-normal text-red-600 mt-2">
+                    가격 고정
+                  </div>
+                )}
+                {drone.originalPrice && (
+                  <div className="text-lg font-normal text-gray-500 line-through mt-1">
+                    원래가: {formatPrice(drone.originalPrice)}원
+                  </div>
+                )}
               </div>
               
               {/* 판매자 정보 */}
@@ -214,6 +229,19 @@ export default function DroneDetailPage() {
                 <div>
                     <h2 className="text-xl font-semibold text-gray-900 mb-4">주요 정보</h2>
                     <div className="grid grid-cols-2 gap-y-3 text-sm">
+                        <dt className="font-medium text-gray-500">출시년도</dt>
+                        <dd className="text-gray-900 font-semibold">{drone.releaseYear}년</dd>
+                        
+                        {drone.purchaseYear && (
+                          <>
+                            <dt className="font-medium text-gray-500">구매년도</dt>
+                            <dd className="text-gray-900 font-semibold">{drone.purchaseYear}년</dd>
+                          </>
+                        )}
+                        
+                        <dt className="font-medium text-gray-500">소유주</dt>
+                        <dd className="text-gray-900 font-semibold">{drone.ownerCount}차 소유주</dd>
+                        
                         <dt className="font-medium text-gray-500">최대 비행거리</dt>
                         <dd className="text-gray-900 font-semibold">{drone.flightDistance} km</dd>
                         

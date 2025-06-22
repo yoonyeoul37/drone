@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import AdBanner from '@/components/AdBanner';
 import SidebarAd from '@/components/SidebarAd';
 import InlineAd from '@/components/InlineAd';
+import DroneCard from '@/components/DroneCard';
 import { sampleDrones } from '@/data/drones';
 import { bannerAds, sidebarAds, inlineAds, getRandomAd } from '@/data/ads';
 
@@ -22,8 +23,13 @@ export default function Home() {
     setRandomInlineAd(getRandomAd('inline'));
   }, []);
 
+  // 프리미엄 드론을 위로, 나머지는 최신순으로 정렬
+  const sortedDrones = [...sampleDrones]
+    .sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime()) // 최신순 정렬
+    .sort((a, b) => (b.isPremium ? 1 : 0) - (a.isPremium ? 1 : 0)); // 프리미엄 우선 정렬
+
   // 인기 드론 6개만 선택
-  const popularDrones = sampleDrones.slice(0, 6);
+  const popularDrones = sortedDrones.slice(0, 6);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -74,79 +80,16 @@ export default function Home() {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {popularDrones.slice(0, 4).map((drone) => (
-                  <div key={drone.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                    <div className="h-48 bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-500 text-4xl">🚁</span>
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{drone.name}</h3>
-                      <p className="text-gray-600 mb-2">{drone.brand}</p>
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="text-lg font-bold text-blue-600">
-                          {drone.price.toLocaleString()}원
-                        </span>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                          drone.level === 'beginner' ? 'bg-green-100 text-green-800' :
-                          drone.level === 'intermediate' ? 'bg-blue-100 text-blue-800' :
-                          drone.level === 'professional' ? 'bg-purple-100 text-purple-800' :
-                          'bg-orange-100 text-orange-800'
-                        }`}>
-                          {drone.level === 'beginner' ? '입문용' :
-                           drone.level === 'intermediate' ? '중급' :
-                           drone.level === 'professional' ? '전문가' : '산업용'}
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => router.push(`/drone/${drone.id}`)}
-                        className="w-full bg-gray-800 hover:bg-gray-900 text-white py-2 rounded-md font-medium transition-colors"
-                      >
-                        상세보기
-                      </button>
-                    </div>
-                  </div>
+                {popularDrones.map((drone) => (
+                  <DroneCard key={drone.id} drone={drone} />
                 ))}
               </div>
             </div>
 
             {/* 인라인 광고 */}
-            {isClient && <InlineAd ad={randomInlineAd} size="medium" />}
+            {/* {isClient && <InlineAd ad={randomInlineAd} size="medium" />} */}
 
             {/* 나머지 드론들 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {popularDrones.slice(4, 6).map((drone) => (
-                <div key={drone.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="h-48 bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-500 text-4xl">🚁</span>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{drone.name}</h3>
-                    <p className="text-gray-600 mb-2">{drone.brand}</p>
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="text-lg font-bold text-blue-600">
-                        {drone.price.toLocaleString()}원
-                      </span>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        drone.level === 'beginner' ? 'bg-green-100 text-green-800' :
-                        drone.level === 'intermediate' ? 'bg-blue-100 text-blue-800' :
-                        drone.level === 'professional' ? 'bg-purple-100 text-purple-800' :
-                        'bg-orange-100 text-orange-800'
-                      }`}>
-                        {drone.level === 'beginner' ? '입문용' :
-                         drone.level === 'intermediate' ? '중급' :
-                         drone.level === 'professional' ? '전문가' : '산업용'}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => router.push(`/drone/${drone.id}`)}
-                      className="w-full bg-gray-800 hover:bg-gray-900 text-white py-2 rounded-md font-medium transition-colors"
-                    >
-                      상세보기
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* 사이드바 */}

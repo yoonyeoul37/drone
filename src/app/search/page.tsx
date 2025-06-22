@@ -60,7 +60,10 @@ export default function SearchPage() {
       filtered = filtered.filter(drone => drone.flightDistance >= range.min && drone.flightDistance <= range.max);
     }
 
-    return filtered;
+    // 프리미엄 드론을 위로, 나머지는 최신순으로 정렬
+    return filtered
+      .sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime()) // 최신순 정렬
+      .sort((a, b) => (b.isPremium ? 1 : 0) - (a.isPremium ? 1 : 0)); // 프리미엄 우선 정렬
   }, [selectedBrand, selectedLevel, selectedPriceRange, selectedFlightDistanceRange]);
 
   return (

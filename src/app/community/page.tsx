@@ -15,22 +15,16 @@ export default function CommunityPage() {
   const [isClient, setIsClient] = useState(false);
   const [randomInlineAd, setRandomInlineAd] = useState(inlineAds[0]);
 
-  // 클라이언트에서만 랜덤 광고 선택
   useEffect(() => {
     setIsClient(true);
     setRandomInlineAd(getRandomAd('inline'));
   }, []);
 
-  // 필터링된 게시글
   const filteredPosts = useMemo(() => {
     let posts = samplePosts;
-    
-    // 카테고리 필터
     if (selectedCategory !== 'all') {
       posts = posts.filter(post => post.category === selectedCategory);
     }
-    
-    // 정렬
     switch (sortBy) {
       case 'latest':
         posts = [...posts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -42,9 +36,21 @@ export default function CommunityPage() {
         posts = [...posts].sort((a, b) => b.views - a.views);
         break;
     }
-    
     return posts;
   }, [selectedCategory, sortBy]);
+
+  // 광고가 포함된 렌더링할 아이템 목록 생성
+  const itemsToRender = useMemo(() => {
+    const items: (any)[] = [];
+    filteredPosts.forEach((post, index) => {
+      items.push({ type: 'post', data: post });
+      // 2번째 게시글 뒤 (index === 1)에 광고 삽입
+      if (isClient && index === 1 && filteredPosts.length > 2) {
+        items.push({ type: 'ad', data: randomInlineAd, id: `ad-${index}` });
+      }
+    });
+    return items;
+  }, [filteredPosts, isClient, randomInlineAd]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -117,20 +123,25 @@ export default function CommunityPage() {
         </div>
 
         {/* 게시글 목록 */}
-        {filteredPosts.length > 0 ? (
-          <div className="space-y-6">
-            {/* 첫 번째 게시글 */}
-            <PostCard post={filteredPosts[0]} />
-            
-            {/* 인라인 광고 (3번째 위치) */}
-            {isClient && filteredPosts.length > 2 && (
-              <InlineAd ad={randomInlineAd} size="small" />
-            )}
-            
-            {/* 나머지 게시글들 */}
-            {filteredPosts.slice(1).map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
+        {itemsToRender.length > 0 ? (
+          <div>
+            {itemsToRender.map((item) => {
+              if (item.type === 'post') {
+                return (
+                  <div key={item.data.id} className="mb-6">
+                    <PostCard post={item.data} />
+                  </div>
+                );
+              }
+              if (item.type === 'ad') {
+                return (
+                  <div key={item.id} className="mb-6">
+                    <InlineAd ad={item.data} size="small" />
+                  </div>
+                );
+              }
+              return null;
+            })}
           </div>
         ) : (
           <div className="text-center py-12">

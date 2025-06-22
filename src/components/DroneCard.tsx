@@ -72,7 +72,12 @@ export default function DroneCard({ drone }: DroneCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col">
+    <div className={`relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col ${drone.isPremium ? 'border-2 border-yellow-400' : ''}`}>
+      {drone.isPremium && (
+        <div className="absolute top-2 right-2 bg-yellow-400 text-white text-xs font-bold px-2 py-1 rounded-md z-10 shadow-md">
+          추천
+        </div>
+      )}
       <Link href={`/drone/${drone.id}`} className="block">
         <div className="relative w-full h-48">
             <Image 
@@ -106,9 +111,31 @@ export default function DroneCard({ drone }: DroneCardProps) {
 
         <div className="text-xl font-bold text-gray-900 mb-3">
           {formatPrice(drone.price)}원
+          {drone.negotiable && drone.minPrice && (
+            <div className="text-sm font-normal text-gray-600">
+              ~ {formatPrice(drone.minPrice)}원까지 협상 가능
+            </div>
+          )}
+          {!drone.negotiable && (
+            <div className="text-sm font-normal text-red-600">
+              가격 고정
+            </div>
+          )}
+          {drone.originalPrice && (
+            <div className="text-sm font-normal text-gray-500 line-through">
+              원래가: {formatPrice(drone.originalPrice)}원
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600 mb-3 border-t pt-3">
+          <div className="font-semibold">출시년도</div><div>{drone.releaseYear}년</div>
+          {drone.purchaseYear && (
+            <>
+              <div className="font-semibold">구매년도</div><div>{drone.purchaseYear}년</div>
+            </>
+          )}
+          <div className="font-semibold">소유주</div><div>{drone.ownerCount}차 소유주</div>
           <div className="font-semibold">최대 비행거리</div><div>{drone.flightDistance} km</div>
           <div className="font-semibold">총 비행시간</div><div>{drone.totalFlightTime} 시간</div>
           <div className="font-semibold">총 비행거리</div><div>{drone.totalFlightDistance} km</div>

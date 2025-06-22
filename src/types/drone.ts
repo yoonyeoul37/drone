@@ -7,7 +7,13 @@ export interface Drone {
   id: number;
   name: string;
   brand: string;
-  price: number;
+  price: number; // 판매가격
+  originalPrice?: number; // 원래 구매가격 (선택사항)
+  negotiable: boolean; // 가격 협상 가능 여부
+  minPrice?: number; // 최저가 (협상 가능한 경우)
+  releaseYear: number; // 출시년도
+  purchaseYear?: number; // 구매년도 (선택사항)
+  ownerCount: number; // 소유주 수 (1차, 2차, 3차...)
   flightDistance: number; // 최대 비행거리 (km)
   totalFlightTime: number; // 총 비행시간 (시간)
   totalFlightDistance: number; // 총 비행거리 (km)
@@ -21,6 +27,7 @@ export interface Drone {
   location: string;
   imageUrl: string;
   postedAt: string;
+  isPremium?: boolean;
 }
 
 export const priceRanges = [
