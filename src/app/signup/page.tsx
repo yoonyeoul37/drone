@@ -116,7 +116,7 @@ export default function SignupPage() {
     <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden">
       {/* Video Background */}
       <video
-        src="/sample-video.mp4"
+        src="/184840-874264415.mp4"
         autoPlay
         loop
         muted
