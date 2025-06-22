@@ -38,12 +38,10 @@ export default function Navbar() {
 
   const navClass = isScrolled
     ? 'fixed top-0 left-0 right-0 z-50 bg-gray-900/90 backdrop-blur-md shadow-lg transition-all duration-300'
-    : 'fixed top-0 left-0 right-0 z-50 bg-transparent transition-all duration-300';
+    : 'fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md transition-all duration-300';
 
-  const linkClass = isScrolled ? 'text-gray-200' : 'text-white';
-  const logoClass = isScrolled
-    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text'
-    : 'text-white';
+  const linkClass = 'text-gray-200';
+  const logoClass = 'bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text';
 
   return (
     <nav className={navClass}>
@@ -61,13 +59,13 @@ export default function Navbar() {
           {/* 데스크톱 메뉴 */}
           <div className="hidden md:block">
             <div className={`ml-10 flex items-baseline space-x-4 ${linkClass}`}>
-              <Link href="/" className="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">홈</Link>
-              <Link href="/search" className="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">드론 검색</Link>
-              <Link href="/sell" className="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">판매하기</Link>
-              <Link href="/community" className="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">커뮤니티</Link>
-              <Link href="/safety-guide" className="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">안전가이드</Link>
-              <Link href="/certifications" className="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">자격증 정보</Link>
-              {isAdmin && <Link href="/admin/ads" className="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">광고관리</Link>}
+              <Link href="/" className="text-gray-200 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">홈</Link>
+              <Link href="/search" className="text-gray-200 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">드론 검색</Link>
+              <Link href="/sell" className="text-gray-200 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">판매하기</Link>
+              <Link href="/community" className="text-gray-200 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">커뮤니티</Link>
+              <Link href="/safety-guide" className="text-gray-200 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">안전가이드</Link>
+              <Link href="/certifications" className="text-gray-200 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">자격증 정보</Link>
+              {isAdmin && <Link href="/admin/ads" className="text-gray-200 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">광고관리</Link>}
             </div>
           </div>
           
@@ -100,7 +98,7 @@ export default function Navbar() {
           
           {/* 모바일 메뉴 버튼 */}
           <div className="md:hidden flex items-center">
-            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={`inline-flex items-center justify-center p-2 rounded-md ${linkClass} hover:bg-gray-200 hover:text-gray-800 focus:outline-none`}>
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={`inline-flex items-center justify-center p-2 rounded-md text-gray-200 hover:bg-gray-700 hover:text-white focus:outline-none`}>
               <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
               </svg>

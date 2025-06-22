@@ -26,7 +26,7 @@ export default function RootLayout({
           <FavoriteProvider>
             <Toaster position="top-center" reverseOrder={false} />
             <Navbar />
-            <main>{children}</main>
+            <main className="pt-16">{children}</main>
             
             {/* 현대적인 푸터 */}
             <footer className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white overflow-hidden">
