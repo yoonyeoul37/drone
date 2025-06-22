@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useFavorite } from '@/contexts/FavoriteContext';
 import { sampleDrones } from '@/data/drones';
+import { samplePosts } from '@/data/posts';
 import Link from 'next/link';
 
 export default function MyPage() {
@@ -14,6 +15,9 @@ export default function MyPage() {
 
   // 내 판매글 가져오기 (현재 사용자가 판매자인 드론들)
   const mySales = sampleDrones.filter(drone => drone.seller.id === user?.id);
+
+  // 내가 쓴 커뮤니티 글 가져오기
+  const myPosts = samplePosts.filter(post => post.authorId === user?.id);
 
   if (!user) {
     return (
@@ -153,6 +157,38 @@ export default function MyPage() {
                   >
                     상세보기
                   </Link>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 내가 쓴 커뮤니티 글 */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">내가 쓴 커뮤니티 글</h2>
+          
+          {myPosts.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="text-gray-400 text-4xl mb-4">✍️</div>
+              <p className="text-gray-600 mb-4">작성한 게시글이 없습니다</p>
+              <Link
+                href="/community/write"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+              >
+                첫 글 작성하러 가기
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {myPosts.slice(0, 5).map((post) => (
+                <div key={post.id} className="border-b border-gray-200 pb-4 last:border-b-0">
+                  <div className="flex items-center justify-between">
+                    <Link href={`/community/post/${post.id}`} className="block">
+                      <h3 className="font-medium text-gray-900 hover:text-blue-600 truncate">{post.title}</h3>
+                    </Link>
+                    <span className="text-sm text-gray-500">{new Date(post.date).toLocaleDateString()}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1 line-clamp-1">{post.content}</p>
                 </div>
               ))}
             </div>

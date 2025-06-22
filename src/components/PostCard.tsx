@@ -50,11 +50,6 @@ export default function PostCard({ post }: PostCardProps) {
           {post.title}
         </h3>
 
-        {/* 내용 미리보기 */}
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-          {post.content}
-        </p>
-
         {/* 통계 */}
         <div className="flex items-center justify-between text-sm text-gray-500 border-t pt-4">
           <div className="flex items-center space-x-4">

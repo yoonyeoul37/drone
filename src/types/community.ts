@@ -1,5 +1,6 @@
 export interface Post {
   id: string;
+  authorId: number;
   title: string;
   content: string;
   author: string;
@@ -12,11 +13,7 @@ export interface Post {
 
 export const categories = [
   '전체',
-  '드론 리뷰',
-  '비행 팁',
-  '법규 정보',
-  '장비 추천',
-  '커스텀 빌드',
-  '사진/영상',
+  '자유게시판',
+  '구인',
   '기타'
 ]; 

@@ -113,64 +113,31 @@ export default function Navbar() {
           {/* 사용자 메뉴 */}
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
-              <div className="relative">
+              <div className="flex items-center space-x-4">
                 <button
-                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-2 hover:text-gray-300 transition-colors"
+                  onClick={logout}
+                  className={`${textColorClass} hover:text-blue-400 transition-colors text-sm font-medium`}
                 >
-                  <span>{user.name}</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
+                  로그아웃
                 </button>
-
-                {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                    <Link
-                      href="/mypage"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      마이페이지
-                    </Link>
-                    <Link
-                      href="/mypage/sales"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      내 판매글 관리
-                    </Link>
-                    <Link
-                      href="/sell"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      드론 등록
-                    </Link>
-                    <hr className="my-1" />
-                    <button
-                      onClick={() => {
-                        logout();
-                        setIsUserMenuOpen(false);
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                    >
-                      로그아웃
-                    </button>
-                  </div>
-                )}
+                <Link
+                  href="/mypage"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+                >
+                  마이페이지
+                </Link>
               </div>
             ) : (
               <div className="flex items-center space-x-4">
                 <Link
                   href="/login"
-                  className="text-white hover:text-gray-300 transition-colors"
+                  className={`${textColorClass} hover:text-blue-400 transition-colors text-sm font-medium`}
                 >
                   로그인
                 </Link>
                 <Link
                   href="/signup"
-                  className="bg-white text-black px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
                 >
                   회원가입
                 </Link>
@@ -233,7 +200,8 @@ export default function Navbar() {
                   광고관리
                 </button>
               )}
-              {user && (
+              <hr className="my-2 border-gray-600" />
+              {user ? (
                 <>
                   <button
                     onClick={() => handleNavigation('/mypage')}
@@ -242,22 +210,25 @@ export default function Navbar() {
                     마이페이지
                   </button>
                   <button
-                    onClick={() => handleNavigation('/mypage/sales')}
-                    className={`${textColorClass} hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium w-full text-left`}
-                  >
-                    내 판매글 관리
-                  </button>
-                  <button
-                    onClick={() => handleNavigation('/sell')}
-                    className={`${textColorClass} hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium w-full text-left`}
-                  >
-                    드론 등록
-                  </button>
-                  <button
                     onClick={handleLogout}
-                    className="text-red-600 hover:text-red-700 block px-3 py-2 rounded-md text-base font-medium w-full text-left"
+                    className="text-red-400 hover:text-red-300 block px-3 py-2 rounded-md text-base font-medium w-full text-left"
                   >
                     로그아웃
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => handleNavigation('/login')}
+                    className={`${textColorClass} hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium w-full text-left`}
+                  >
+                    로그인
+                  </button>
+                  <button
+                    onClick={() => handleNavigation('/signup')}
+                    className={`${textColorClass} hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium w-full text-left`}
+                  >
+                    회원가입
                   </button>
                 </>
               )}

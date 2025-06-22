@@ -70,7 +70,52 @@ export default function AdsAdminPage() {
 
         {/* 탭 콘텐츠 */}
         <div>
-          {/* ... (각 탭에 대한 콘텐츠 렌더링) */}
+          {getAdsByType(activeTab as 'banner' | 'sidebar' | 'inline').map((ad) => (
+            <div key={ad.id} className="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
+              <div className="p-6">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800">{ad.title}</h3>
+                    <p className="text-sm text-gray-500 mt-1">{ad.description}</p>
+                    <a href={ad.link} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500 hover:underline">
+                      {ad.link}
+                    </a>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleEditAd(ad)}
+                      className="px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm hover:bg-blue-200"
+                    >
+                      수정
+                    </button>
+                    <button
+                      onClick={() => handleDeleteAd(ad.id)}
+                      className="px-3 py-1 bg-red-100 text-red-700 rounded-md text-sm hover:bg-red-200"
+                    >
+                      삭제
+                    </button>
+                  </div>
+                </div>
+                <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
+                  <div className="flex space-x-4">
+                    <span>노출수: {(ad.views || 0).toLocaleString()}</span>
+                    <span>클릭수: {(ad.clicks || 0).toLocaleString()}</span>
+                    <span>CTR: {ad.views && ad.clicks ? ((ad.clicks / ad.views) * 100).toFixed(2) : '0.00'}%</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="font-semibold text-lg text-gray-800">{(ad.price || 0).toLocaleString()}원</span>
+                    <span className="text-xs text-gray-500"> /월</span>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-50 p-4">
+                <h4 className="text-sm font-medium text-gray-700 mb-2">광고 미리보기</h4>
+                {activeTab === 'banner' && <AdBanner ad={ad} />}
+                {activeTab === 'sidebar' && <SidebarAd ad={ad} />}
+                {activeTab === 'inline' && <InlineAd ad={ad} />}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

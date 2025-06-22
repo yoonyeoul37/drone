@@ -17,10 +17,14 @@ export default function LoginPage() {
     setError('');
 
     try {
-      await login(email, password);
-      router.push('/');
+      const success = await login(email, password);
+      if (success) {
+        router.push('/');
+      } else {
+        setError('이메일 또는 비밀번호가 일치하지 않습니다.');
+      }
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || '로그인 중 오류가 발생했습니다.');
     }
   };
 

@@ -3,6 +3,7 @@ import { Post } from '@/types/community';
 export const samplePosts: Post[] = [
   {
     id: '1',
+    authorId: 1,
     title: 'DJI Mini 3 Pro 구매 후기 - 정말 만족합니다!',
     content: `안녕하세요! 드론 입문자입니다. 
     
@@ -27,6 +28,7 @@ DJI Mini 3 Pro를 구매한지 2주가 되었는데, 정말 만족하고 있어�
   },
   {
     id: '2',
+    authorId: 2,
     title: '드론 촬영 팁 공유합니다',
     content: `드론 촬영할 때 유용한 팁들을 공유해드릴게요!
 
@@ -55,6 +57,7 @@ DJI Mini 3 Pro를 구매한지 2주가 되었는데, 정말 만족하고 있어�
   },
   {
     id: '3',
+    authorId: 1,
     title: '드론 법규에 대해 궁금한 점이 있어요',
     content: `안녕하세요! 드론을 구매하려고 하는데 법규가 걱정되네요.
 
@@ -79,6 +82,7 @@ DJI Mini 3 Pro를 구매한지 2주가 되었는데, 정말 만족하고 있어�
   },
   {
     id: '4',
+    authorId: 2,
     title: '드론 모임 하실 분 계신가요?',
     content: `서울 강남에서 드론 애호가 모임을 만들어보려고 합니다!
 
@@ -106,6 +110,7 @@ DJI Mini 3 Pro를 구매한지 2주가 되었는데, 정말 만족하고 있어�
   },
   {
     id: '5',
+    authorId: 3,
     title: '새로운 드론 기술 소식 - AI 자동 추적 기능',
     content: `최신 드론 기술 소식을 전해드릴게요!
 
@@ -132,6 +137,7 @@ AI 기술이 발전하면서 드론 촬영이 더욱 쉬워지고 있네요!`,
   },
   {
     id: '6',
+    authorId: 1,
     title: '드론으로 찍은 한강 풍경 사진 공유',
     content: `오늘 한강에서 드론으로 찍은 사진들을 공유해드릴게요!
 

@@ -209,10 +209,10 @@ export default function DroneDetailPage() {
               {/* 버튼들 */}
               <div className="space-y-3">
                 <button
-                  onClick={() => setIsContactModalOpen(true)}
+                  onClick={() => router.push(`/chat/${drone.id}`)}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105"
                 >
-                  판매자에게 연락하기
+                  판매자와 채팅하기
                 </button>
                 <button
                   className={`w-full ${isFavorite(drone.id) ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'} font-medium py-3 px-6 rounded-lg transition-colors`}
