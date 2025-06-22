@@ -37,10 +37,10 @@ export default function Navbar() {
   };
 
   const navClass = isScrolled
-    ? 'fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-lg transition-all duration-300'
+    ? 'fixed top-0 left-0 right-0 z-50 bg-gray-900/90 backdrop-blur-md shadow-lg transition-all duration-300'
     : 'fixed top-0 left-0 right-0 z-50 bg-transparent transition-all duration-300';
 
-  const linkClass = isScrolled ? 'text-gray-800' : 'text-white';
+  const linkClass = isScrolled ? 'text-gray-200' : 'text-white';
   const logoClass = isScrolled
     ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text'
     : 'text-white';
@@ -111,24 +111,24 @@ export default function Navbar() {
 
       {/* 모바일 메뉴 */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-md">
+        <div className="md:hidden bg-gray-900/95 backdrop-blur-md">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <button onClick={() => handleNavigation('/')} className="text-gray-800 hover:bg-gray-200 block px-3 py-2 rounded-md text-base font-medium w-full text-left">홈</button>
-            <button onClick={() => handleNavigation('/search')} className="text-gray-800 hover:bg-gray-200 block px-3 py-2 rounded-md text-base font-medium w-full text-left">드론 검색</button>
-            <button onClick={() => handleNavigation('/sell')} className="text-gray-800 hover:bg-gray-200 block px-3 py-2 rounded-md text-base font-medium w-full text-left">판매하기</button>
-            <button onClick={() => handleNavigation('/community')} className="text-gray-800 hover:bg-gray-200 block px-3 py-2 rounded-md text-base font-medium w-full text-left">커뮤니티</button>
-            <button onClick={() => handleNavigation('/safety-guide')} className="text-gray-800 hover:bg-gray-200 block px-3 py-2 rounded-md text-base font-medium w-full text-left">안전가이드</button>
-            <button onClick={() => handleNavigation('/certifications')} className="text-gray-800 hover:bg-gray-200 block px-3 py-2 rounded-md text-base font-medium w-full text-left">자격증 정보</button>
-            {isAdmin && <button onClick={() => handleNavigation('/admin/ads')} className="text-gray-800 hover:bg-gray-200 block px-3 py-2 rounded-md text-base font-medium w-full text-left">광고관리</button>}
+            <button onClick={() => handleNavigation('/')} className="text-gray-200 hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium w-full text-left">홈</button>
+            <button onClick={() => handleNavigation('/search')} className="text-gray-200 hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium w-full text-left">드론 검색</button>
+            <button onClick={() => handleNavigation('/sell')} className="text-gray-200 hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium w-full text-left">판매하기</button>
+            <button onClick={() => handleNavigation('/community')} className="text-gray-200 hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium w-full text-left">커뮤니티</button>
+            <button onClick={() => handleNavigation('/safety-guide')} className="text-gray-200 hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium w-full text-left">안전가이드</button>
+            <button onClick={() => handleNavigation('/certifications')} className="text-gray-200 hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium w-full text-left">자격증 정보</button>
+            {isAdmin && <button onClick={() => handleNavigation('/admin/ads')} className="text-gray-200 hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium w-full text-left">광고관리</button>}
           </div>
-          <div className="pt-4 pb-3 border-t border-gray-200">
+          <div className="pt-4 pb-3 border-t border-gray-700">
             {isLoggedIn && user ? (
               <div className="px-5">
-                <p className="text-base font-medium text-gray-800">{user.name}</p>
-                <p className="text-sm font-medium text-gray-500">{user.email}</p>
+                <p className="text-base font-medium text-gray-200">{user.name}</p>
+                <p className="text-sm font-medium text-gray-400">{user.email}</p>
                 <div className="mt-3 space-y-1">
-                  <button onClick={() => handleNavigation('/mypage')} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-200 w-full text-left">마이페이지</button>
-                  <button onClick={handleLogout} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-200 w-full text-left">로그아웃</button>
+                  <button onClick={() => handleNavigation('/mypage')} className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 w-full text-left">마이페이지</button>
+                  <button onClick={handleLogout} className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 w-full text-left">로그아웃</button>
                 </div>
               </div>
             ) : (
