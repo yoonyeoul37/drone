@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 
 const buyerChecklist = [
@@ -22,9 +23,13 @@ const sellerChecklist = [
 ];
 
 const SafetyGuidePage = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState('buyer');
+
   const safetyTips = [
     {
       category: '비행 전 점검',
+      icon: '🔍',
       tips: [
         '프로펠러에 손상이 없는지 확인하고 단단히 고정되었는지 확인하세요.',
         '배터리가 완전히 충전되었는지 확인하고, 외관상 손상이 없는지 확인하세요.',
@@ -34,6 +39,7 @@ const SafetyGuidePage = () => {
     },
     {
       category: '비행 환경',
+      icon: '🌍',
       tips: [
         '사람이 많은 곳, 공항 주변, 군사 시설 등 비행 금지 구역에서는 비행하지 마세요.',
         '강풍, 비, 눈 등 악천후 시에는 비행을 삼가세요.',
@@ -43,6 +49,7 @@ const SafetyGuidePage = () => {
     },
     {
       category: '비행 중 주의사항',
+      icon: '✈️',
       tips: [
         '항상 드론을 시야에 두는 것을 원칙으로 하세요 (가시권 비행).',
         '드론 조종 중에는 음주 등 비행에 영향을 줄 수 있는 행위를 하지 마세요.',
@@ -52,6 +59,7 @@ const SafetyGuidePage = () => {
     },
     {
       category: '법규 및 규제',
+      icon: '⚖️',
       tips: [
         '12kg 초과 드론은 비행 전 국토교통부의 승인이 필요합니다.',
         '사업용으로 드론을 사용하려면 관련 자격증을 취득해야 합니다.',
@@ -61,52 +69,206 @@ const SafetyGuidePage = () => {
     }
   ];
 
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    },
+    hover: {
+      y: -5,
+      scale: 1.02,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut"
+      }
+    }
+  };
+
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
-            드론 안전 비행 가이드
-          </h1>
-          <p className="mt-4 text-xl text-gray-600">
-            안전한 드론 비행을 위한 필수 정보들을 확인하세요.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 relative overflow-hidden">
+      {/* 배경 장식 요소들 */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-gray-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+      </div>
 
-        <div className="space-y-12">
-          {safetyTips.map((section, index) => (
-            <div key={index} className="bg-white p-8 rounded-2xl shadow-lg">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">{section.category}</h2>
-              <ul className="space-y-4">
-                {section.tips.map((tip, tipIndex) => (
-                  <li key={tipIndex} className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <svg className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <p className="ml-4 text-gray-700">{tip}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-16 text-center bg-blue-50 p-8 rounded-2xl">
-          <h3 className="text-xl font-bold text-blue-900">더 많은 정보가 필요하신가요?</h3>
-          <p className="mt-2 text-blue-800">
-            국토교통부에서 운영하는 "드론 원스톱" 민원 포털에서 더 자세한 법규 및 정보를 확인하실 수 있습니다.
-          </p>
-          <a
-            href="https://drone.onestop.go.kr/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors"
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+        >
+          {/* 헤더 */}
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            드론 원스톱 바로가기
-          </a>
-        </div>
+            <motion.h1 
+              className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                드론 안전 비행 가이드
+              </span>
+            </motion.h1>
+            <motion.p 
+              className="max-w-3xl mx-auto text-xl text-gray-300 leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              안전한 드론 비행을 위한 <span className="font-semibold text-blue-400">필수 정보</span>들을 확인하세요
+            </motion.p>
+          </motion.div>
+
+          {/* 탭 네비게이션 */}
+          <motion.div 
+            className="bg-gray-800/80 backdrop-blur-sm rounded-2xl p-2 mb-12 shadow-lg border border-gray-700 max-w-2xl mx-auto"
+            variants={cardVariants}
+          >
+            <div className="flex space-x-2">
+              {[
+                { id: 'buyer', label: '🛒 구매자 체크리스트', icon: '🛒' },
+                { id: 'seller', label: '💰 판매자 체크리스트', icon: '💰' }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-1 py-4 px-6 rounded-xl font-medium transition-all duration-300 ${
+                    activeTab === tab.id
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg transform scale-105 border border-blue-500'
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* 체크리스트 콘텐츠 */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-16"
+          >
+            <div className="bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-gray-700">
+              <h2 className="text-2xl font-bold text-white mb-8 flex items-center">
+                <span className="mr-3 text-3xl">
+                  {activeTab === 'buyer' ? '🛒' : '💰'}
+                </span>
+                {activeTab === 'buyer' ? '구매자 체크리스트' : '판매자 체크리스트'}
+              </h2>
+              
+              <div className="space-y-6">
+                {(activeTab === 'buyer' ? buyerChecklist : sellerChecklist).map((item, index) => (
+                  <motion.div
+                    key={index}
+                    className="flex items-start space-x-4 p-6 bg-gray-700/50 rounded-2xl border border-gray-600 hover:border-blue-500 transition-all duration-300"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                      {index + 1}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-white mb-2">{item.item}</h3>
+                      <p className="text-gray-300 leading-relaxed">{item.details}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* 안전 가이드 섹션 */}
+          <motion.div 
+            className="space-y-8"
+            variants={cardVariants}
+          >
+            {safetyTips.map((section, index) => (
+              <motion.div
+                key={index}
+                className="bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-gray-700"
+                variants={cardVariants}
+                whileHover="hover"
+              >
+                <div className="flex items-center mb-8">
+                  <div className="text-4xl mr-4">{section.icon}</div>
+                  <h2 className="text-2xl font-bold text-white">{section.category}</h2>
+                </div>
+                
+                <div className="grid gap-6 md:grid-cols-2">
+                  {section.tips.map((tip, tipIndex) => (
+                    <motion.div
+                      key={tipIndex}
+                      className="flex items-start space-x-4 p-4 bg-gray-700/50 rounded-xl border border-gray-600"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: (index * 0.1) + (tipIndex * 0.05) }}
+                    >
+                      <div className="flex-shrink-0 mt-1">
+                        <CheckCircleIcon className="h-5 w-5 text-green-400" />
+                      </div>
+                      <p className="text-gray-300 leading-relaxed">{tip}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* 추가 정보 섹션 */}
+          <motion.div 
+            className="mt-16 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 text-center shadow-2xl border border-blue-500"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+          >
+            <h3 className="text-2xl font-bold text-white mb-4">더 많은 정보가 필요하신가요?</h3>
+            <p className="text-blue-100 mb-6 leading-relaxed">
+              국토교통부에서 운영하는 "드론 원스톱" 민원 포털에서 더 자세한 법규 및 정보를 확인하실 수 있습니다.
+            </p>
+            <motion.a
+              href="https://drone.onestop.go.kr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              드론 원스톱 바로가기 →
+            </motion.a>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );
